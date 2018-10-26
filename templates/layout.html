@@ -15,7 +15,17 @@
         <div id="main">
             {% block sidebar %}
             {% endblock %}
-            <h1 style="margin:5px"><a href="/cards"><span class="fa fa-th"></span></a>&nbsp{% block bodytitle %}{% endblock %}</h1>
+            <div class="row">
+                <div class="col-sm-12">
+                    <h1 style="margin:5px">
+                        <a href="/cards">
+                            <span class="fa fa-th"></span>
+                        </a>&nbsp
+                        {% block bodytitle %}
+                        {% endblock %}
+                    </h1>
+                </div>
+            </div>
             {% block main %}
             {% endblock %}
         </div>

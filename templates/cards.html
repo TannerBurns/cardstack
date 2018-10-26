@@ -16,12 +16,31 @@
                             <div class="card-body">
                                 <center><h3 class="card-title">{{ card.get("name") }}</h3></center>
                                 <hr>
-                                <p class="card-text"><span class="fa fa-clock-o"></span>&nbsp{{ card.get("created") }}</p>
-                                <p class="card-text">Card ID: {{ card.get("event_id") }}</p>
-                                <br>
-                                <div class="form-group">
-                                    <a href="/card/{{ card.get('event_id') }}" class="btn btn-primary">Open Card</a>
-                                    <a href="/card/{{ card.get('event_id') }}/delete" class="btn btn-primary">Delete Card</a>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p class="card-text"><h5><span class="fa fa-clock-o"></span>&nbsp{{ card.get("created") }}</h5></p>
+                                        <p class="card-text"><h5>Card ID: {{ card.get("event_id") }}</h5></p>
+                                        <br>
+                                        <div class="form-group">
+                                            <a href="/card/{{ card.get('event_id') }}" class="btn btn-primary">Open Card</a>
+                                            <a href="/card/{{ card.get('event_id') }}/delete" class="btn btn-primary">Delete Card</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        {% if card.get("status_counts") %}
+                                            {% for k, v in card.get("status_counts").items() %}
+                                                {% if k == "Created" %}
+                                                    <h4>{{ k }}: <span class="badge badge-secondary">{{ v }}</span></h4>
+                                                {% elif k == "In Progress" %}
+                                                    <h4>{{ k }}: <span class="badge badge-primary">{{ v }}</span></h4>
+                                                {% elif k == "Paused" %}
+                                                    <h4>{{ k }}: <span class="badge badge-warning">{{ v }}</span></h4>
+                                                {% elif k == "Complete" %}
+                                                    <h4>{{ k }}: <span class="badge badge-success">{{ v }}</span></h4>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                         </div>

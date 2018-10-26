@@ -1,0 +1,124 @@
+{% extends "layout.html" %}
+{% block title %}
+    {% if subcard %}
+        SubCard - {{ subcard.get("event").get("content")[0].get("title") }}
+    {% else %}
+        SubCard - ERROR
+    {% endif %}
+{% endblock %}
+
+{% block bodytitle %}
+    {% if subcard %}
+        {{ subcard.get("event").get("content")[0].get("title") }}
+    {% else %}
+        ERROR
+    {% endif %}
+{% endblock %}
+
+{% block main %}
+    <hr style="background:antiquewhite">
+    <div class="container-fluid">
+        <div class="row justify-content-start">
+            <div class="col-sm-4">
+                <div class="row">
+                    <div class="col-sm-3 offset-sm-1">
+                        {% if subcard %}
+                            {% if subcard.get("event").get("content")[0].get("comments") %}
+                                <h4>Comments: <span class="badge badge-primary">{{ subcard.get("event").get("content")[0].get("comments")|length }}</span></h4>
+                            {% else %}
+                                <h4>Comments: <span class="badge badge-primary">0</span></h4>
+                            {% endif %}
+                            <br>
+                            <h4>
+                                Status:
+                                {% if subcard.get("event").get("content")[0].get("status") == "Created" %}
+                                    <span class="badge badge-secondary">
+                                        {{ subcard.get("event").get("content")[0].get("status") }}
+                                    </span>
+                                {% elif subcard.get("event").get("content")[0].get("status") == "In Progress" %}
+                                    <span class="badge badge-primary">
+                                        {{ subcard.get("event").get("content")[0].get("status") }}
+                                    </span>
+                                {% elif subcard.get("event").get("content")[0].get("status") == "Paused" %}
+                                    <span class="badge badge-warning">
+                                        {{ subcard.get("event").get("content")[0].get("status") }}
+                                    </span>
+                                {% elif subcard.get("event").get("content")[0].get("status") == "Complete" %}
+                                    <span class="badge badge-success">
+                                        {{ subcard.get("event").get("content")[0].get("status") }}
+                                    </span>
+                                {% else %}
+                                    <span class="badge badge-danger">
+                                        Error
+                                    </span>
+                                {% endif %}
+                            </h4>
+                        {% else %}
+                            ERROR
+                        {% endif %}
+                        
+                    </div>
+                    <div class="col-sm-1 offset-sm-2">
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                <span class="fa fa-edit"></span>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/card/{{ subcard.get('event').get('event_id') }}/subcard/{{ subcard.get('event').get('content')[0].get('content_id') }}/created">Created</a>
+                                <a class="dropdown-item" href="/card/{{ subcard.get('event').get('event_id') }}/subcard/{{ subcard.get('event').get('content')[0].get('content_id') }}/progress">In Progress</a>
+                                <a class="dropdown-item" href="/card/{{ subcard.get('event').get('event_id') }}/subcard/{{ subcard.get('event').get('content')[0].get('content_id') }}/pause">Pause</a>
+                                <a class="dropdown-item" href="/card/{{ subcard.get('event').get('event_id') }}/subcard/{{ subcard.get('event').get('content')[0].get('content_id') }}/complete">Complete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr style="background:antiquewhite">
+                <div class="row justify-content-around">
+                    <div class="col-4">
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                {% if subcard.get("event").get("content")[0].get("comments") %}
+                    {% for comment in subcard.get("event").get("content")[0].get("comments") %}
+                        <div class="panel panel-default border rounded">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-11">
+                                        <h4 class="pull-right"><small><span class="fa fa-clock-o"></span> {{ comment.get("created") }}</small></h4>
+                                        {% if comment.get("labels") %}
+                                            <div class="row">
+                                                <div class="col-sm-1">
+                                                    
+                                                </div>
+                                                <div class="col-sm-5">
+                                                    <div class="row">
+                                                        {% for label in comment.get("labels")|reverse %}
+                                                            <div>
+                                                                <span class="badge badge-primary">{{ label.get("label") }}</span>
+                                                            </div>
+                                                            &nbsp&nbsp
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        <hr style="border-color:white;">
+                                        <div class="row">
+                                            <div class="col-sm-1"></div>
+                                            <div class="col-sm-10">
+                                                {{comment.get("body")|safe}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

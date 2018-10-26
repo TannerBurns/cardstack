@@ -7,3 +7,13 @@ body {
     background-color: #29303d;
     color: #dcdad6;
 }
+
+.badge-secondary {
+    background-color: #6c24f1fa;
+    color: #ffffff;
+}
+
+.badge-warning {
+    background-color: #f1953f;
+    color: #ffffff;
+}

@@ -16,18 +16,41 @@
             <br>
             {% if card.get("event").get("content") %}
                 <div class="card-columns">
-                    {% for subcard in card.get("event").get("content") %}
+                    {% for subcard in card.get("event").get("content")|reverse %}
                         <div class="card">
                             <div class="card-body">
                                 <h3 class="card-title">{{ subcard.get("title") }}</h3>
                                 <hr>
                                 <p class="card-text"><span class="fa fa-clock-o"></span>&nbsp{{ subcard.get("created") }}</p>
                                 <p class="card-text">SubCard ID: {{ subcard.get("content_id") }}</p>
-                                <p><span class="badge badge-success">{{ subcard.get("status") }}</span></p>
+                                <p>
+                                    {% if subcard.get("status") == "Created" %}
+                                        <span class="badge badge-secondary">
+                                            {{ subcard.get("status") }}
+                                        </span>
+                                    {% elif subcard.get("status") == "In Progress" %}
+                                        <span class="badge badge-primary">
+                                            {{ subcard.get("status") }}
+                                        </span>
+                                    {% elif subcard.get("status") == "Paused" %}
+                                        <span class="badge badge-warning">
+                                            {{ subcard.get("status") }}
+                                        </span>
+                                    {% elif subcard.get("status") == "Complete" %}
+                                        <span class="badge badge-success">
+                                            {{ subcard.get("status") }}s
+                                        </span>
+                                    {% else %}
+                                        <span class="badge badge-danger">
+                                            Error
+                                        </span>
+                                    {% endif %}
+                                </p>
                                 <br>
                                 <div class="form-group">
-                                    <a href="/card/{{ card.get('event').get('event_id') }}/subcard/{{ subcard.get('content_id') }}" class="btn btn-primary">Comments</a>
+                                    <a href="/card/{{ card.get('event').get('event_id') }}/subcard/{{ subcard.get('content_id') }}" class="btn btn-primary">Open SubCard</a>
                                     <a href="/card/{{ card.get('event').get('event_id') }}/subcard/{{ subcard.get('content_id') }}/delete" class="btn btn-primary">Delete Card</a>
+                                    <a href="#" class="btn btn-primary">Summary</a>
                                 </div>
                             </div>
                         </div>
