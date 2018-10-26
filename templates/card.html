@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+{% block title %}
+    Card
+{% endblock %}
+{% block bodytitle %}
+    {% if card %}
+        {{ card.get("event").get("name") }}
+    {% else %}
+        ERROR
+    {% endif %}
+{% endblock %}
+
+{% block main %}
+    <div class="container-fluid">
+        {% if card %}
+            <br>
+            {% if card.get("event").get("content") %}
+                <div class="card-columns">
+                    {% for subcard in card.get("event").get("content") %}
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 class="card-title">{{ subcard.get("title") }}</h3>
+                                <hr>
+                                <p class="card-text"><span class="fa fa-clock-o"></span>&nbsp{{ subcard.get("created") }}</p>
+                                <p class="card-text">SubCard ID: {{ subcard.get("content_id") }}</p>
+                                <p><span class="badge badge-success">{{ subcard.get("status") }}</span></p>
+                                <br>
+                                <div class="form-group">
+                                    <a href="/card/{{ card.get('event').get('event_id') }}/subcard/{{ subcard.get('content_id') }}" class="btn btn-primary">Comments</a>
+                                    <a href="/card/{{ card.get('event').get('event_id') }}/subcard/{{ subcard.get('content_id') }}/delete" class="btn btn-primary">Delete Card</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="card">
+                        <div class="card-body">
+                            <form action="/card/{{ card.get('event').get('event_id') }}/subcard/new" method="post">
+                                <center>
+                                    <div class="input-group" style="width:75%">
+                                        <input type="text" class="form-control" placeholder="New SubCard.." name="subcard_name">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="submit" name="new_subcard_submit"><span class="fa fa-plus"></span></button>  
+                                        </div>
+                                    </div>
+                                </center>
+                            </form>
+                            <hr>
+                            <p class="card-text">Create a new subcard</p>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="card-columns">
+                    <div class="card">
+                        <div class="card-body">
+                            <form action="/card/{{ card.get('event').get('event_id') }}/subcard/new" method="post">
+                                <center>
+                                    <div class="input-group" style="width:75%">
+                                        <input type="text" class="form-control" placeholder="New SubCard.." name="subcard_name">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="submit" name="new_subcard_submit"><span class="fa fa-plus"></span></button>  
+                                        </div>
+                                    </div>
+                                </center>
+                            </form>
+                            <hr>
+                            <p class="card-text">Create a new subcard</p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% else %}
+            <h1 style="margin:5px"><span class="fa fa-th"></span>&nbsp&nbspCardStack</h1>
+            <h2>Error. Failed to connect to evendex API</h2>
+        {% endif %}
+    </div>
+    </div>
+{% endblock %}
