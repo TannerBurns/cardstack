@@ -17,3 +17,8 @@ body {
     background-color: #f1953f;
     color: #ffffff;
 }
+
+textarea {
+    background:#222222;
+    color:#dcdad6;
+}

@@ -15,22 +15,30 @@ API_URL = "http://{0}:8000/api/v1/{1}"
 
 @app.route('/')
 def index():
-    return redirect(url_for("cards"))
+    return redirect(url_for("cards", page=1))
 
-@app.route("/cards")
-def cards():
-    resp = requests.get(API_URL.format(BASE_IP, "events"))
+@app.route("/cards/page/<page>")
+def cards(page):
+    resp = requests.get(API_URL.format(BASE_IP, "events/count"))
+    if resp.status_code == 200:
+        numpages = round(resp.json().get("count") / 11)
+        if numpages == 0:
+            numpages = 1
+    
+    offset = (int(page) - 1) * 11
+    resp = requests.get(API_URL.format(BASE_IP, "events?offset={0}".format(offset)))
     if resp.status_code == 200:
         cards = resp.json()
-        for event in cards.get("events"):
-            if event.get("content"):
-                statuses = []
-                for content in event.get("content"):
-                    statuses.append(content.get("status"))
-                sc = dict(Counter(statuses))
-                if sc:
-                    event.update({"status_counts":sc})
-                print(event.keys())
+        cards.update({"pages":{"max": int(numpages), "current":int(page)}})
+        if cards.get("events"):
+            for event in cards.get("events"):
+                if event.get("content"):
+                    statuses = []
+                    for content in event.get("content"):
+                        statuses.append(content.get("status"))
+                    sc = dict(Counter(statuses))
+                    if sc:
+                        event.update({"status_counts":sc})
         return render_template("cards.html", cards=cards)
     
     return render_template("cards.html", cards=None)
@@ -42,7 +50,7 @@ def newCard():
         resp = requests.get(API_URL.format(BASE_IP, "event?name={0}".format(cardName)))
         # flash message about creation after checking status code?????
 
-    return redirect(url_for("cards"))
+    return redirect(url_for("cards", page=1))
 
 @app.route("/card/<cardID>")
 def card(cardID):
@@ -57,7 +65,7 @@ def card(cardID):
 def cardDelete(cardID):
     resp = requests.delete(API_URL.format(BASE_IP, "event/{0}".format(cardID)))
     
-    return redirect(url_for("cards"))
+    return redirect(url_for("cards", page=1))
 
 @app.route("/card/<cardID>/subcard/<subcardID>/delete")
 def subcardDelete(cardID, subcardID):

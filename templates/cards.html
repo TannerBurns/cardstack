@@ -11,13 +11,13 @@
         {% if cards %}
             {% if cards.get("count") > 0 %}
                 <div class="card-columns">
-                    {% for card in cards.get("events")|reverse %}
+                    {% for card in cards.get("events") %}
                         <div class="card">
                             <div class="card-body">
                                 <center><h3 class="card-title">{{ card.get("name") }}</h3></center>
-                                <hr>
+                                <hr style="background-color:#000;">
                                 <div class="row">
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-6" style="border-right:1px solid #000;">
                                         <p class="card-text"><h5><span class="fa fa-clock-o"></span>&nbsp{{ card.get("created") }}</h5></p>
                                         <p class="card-text"><h5>Card ID: {{ card.get("event_id") }}</h5></p>
                                         <br>
@@ -26,6 +26,7 @@
                                             <a href="/card/{{ card.get('event_id') }}/delete" class="btn btn-primary">Delete Card</a>
                                         </div>
                                     </div>
+                                    
                                     <div class="col-sm-6">
                                         {% if card.get("status_counts") %}
                                             {% for k, v in card.get("status_counts").items() %}
@@ -82,8 +83,32 @@
                     </div>
                 </div> 
             {% endif %}
+
         {% else %}
             <h2>Error. Failed to connect to evendex API</h2>
+        {% endif %}
+        {% if cards %}
+            {% if cards.get("count") > 0 %}
+                <div class="row">
+                    <div class="offset-sm-5">
+                        <ul class="pagination">
+                            {% if cards.get('pages').get('current') - 1  <= 0 %}
+                                <li class="page-item"><a class="page-link" href="/cards/page/1">Previous</a></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="/cards/page/{{ cards.get('pages').get('current')-1 }}">Previous</a></li>
+                            {% endif %}
+                            {% for ind in range(0, cards.get("pages").get("max")) %}
+                                <li class="page-item"><a class="page-link" href="/cards/page/{{ ind+1 }}">{{ ind+1 }}</a></li>
+                            {% endfor %}
+                            {% if cards.get('pages').get('current') +1 > cards.get('pages'). get('max') %}
+                                <li class="page-item"><a class="page-link" href="/cards/page/{{ cards.get('pages').get('max') }}">Next</a></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="/cards/page/{{ cards.get('pages').get('current')+1 }}">Next</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
         {% endif %}
     </div>
 {% endblock %}

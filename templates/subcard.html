@@ -87,6 +87,7 @@
                                 <div class="row">
                                     <div class="col-sm-11">
                                         <h4 class="pull-right"><small><span class="fa fa-clock-o"></span> {{ comment.get("created") }}</small></h4>
+                                        <br>
                                         {% if comment.get("labels") %}
                                             <div class="row">
                                                 <div class="col-sm-1">
@@ -117,6 +118,9 @@
                         </div>
                         <br>
                     {% endfor %}
+                    <div class="form-group">
+                        <textarea class="form-control" rows="3" required></textarea>
+                    </div>
                 {% endif %}
             </div>
         </div>
