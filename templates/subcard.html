@@ -21,8 +21,12 @@
         <div class="row justify-content-start">
             <div class="col-sm-4">
                 <div class="row">
-                    <div class="col-sm-3 offset-sm-1">
+                    <div class="col-sm-5 offset-sm-1">
                         {% if subcard %}
+                            {% if subcard.get("event").get("content")[0].get("created") %}
+                                <h4><span class="fa fa-clock-o"></span>&nbsp{{ subcard.get("event").get("content")[0].get("created") }}</h4>
+                                <br>
+                            {% endif %}
                             {% if subcard.get("event").get("content")[0].get("comments") %}
                                 <h4>Comments: <span class="badge badge-primary">{{ subcard.get("event").get("content")[0].get("comments")|length }}</span></h4>
                             {% else %}
@@ -82,26 +86,43 @@
             <div class="col-sm-8">
                 {% if subcard.get("event").get("content")[0].get("comments") %}
                     {% for comment in subcard.get("event").get("content")[0].get("comments") %}
-                        <div class="panel panel-default border rounded">
+                        <div class="panel panel-default">
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-sm-11">
-                                        <h4 class="pull-right"><small><span class="fa fa-clock-o"></span> {{ comment.get("created") }}</small></h4>
-                                        <br>
+                                        <center><h4><small><span class="fa fa-clock-o"></span> {{ comment.get("created") }}</small></h4></center>
                                         {% if comment.get("labels") %}
                                             <div class="row">
-                                                <div class="col-sm-1">
-                                                    
+                                                <div class=col-sm-1">
+                                                    <form action="/card/{{ subcard.get('event').get('event_id') }}/subcard/{{ subcard.get('event').get('content')[0].get('content_id') }}" method="post">
+                                                            <button class="btn btn-danger" type="submit" name="add_label" value="{{ comment.get('comment_id') }}">
+                                                                <span class="fa fa-remove"></span>
+                                                            </button>
+                                                    </form>
                                                 </div>
-                                                <div class="col-sm-5">
+                                                <div class="col-sm-6 offset-sm-1">
                                                     <div class="row">
                                                         {% for label in comment.get("labels")|reverse %}
                                                             <div>
-                                                                <span class="badge badge-primary">{{ label.get("label") }}</span>
+                                                                <form action="/card/{{ subcard.get('event').get('event_id') }}/subcard/{{ subcard.get('event').get('content')[0].get('content_id') }}" method="post">
+                                                                    <span class="badge badge-primary">
+                                                                        {{ label.get("label") }}
+                                                                        <button class="btn btn-primary" type="submit" name="delete_label" value="{{ comment.get('comment_id') }},{{ label.get('label_id') }}">
+                                                                            <span class="fa fa-remove"></span>
+                                                                        </button>
+                                                                    </span>
+                                                                </form>
                                                             </div>
                                                             &nbsp&nbsp
                                                         {% endfor %}
                                                     </div>
+                                                </div>
+                                                <div class="offset-sm-4">
+                                                    <form action="/card/{{ subcard.get('event').get('event_id') }}/subcard/{{ subcard.get('event').get('content')[0].get('content_id') }}" method="post">
+                                                            <button class="btn btn-danger" type="submit" name="delete_comment" value="{{ comment.get('comment_id') }}">
+                                                                <span class="fa fa-remove"></span>
+                                                            </button>
+                                                    </form>
                                                 </div>
                                             </div>
                                         {% endif %}
@@ -117,9 +138,19 @@
                             </div>
                         </div>
                         <br>
+                        <br>
                     {% endfor %}
-                    <div class="form-group">
-                        <textarea class="form-control" rows="3" required></textarea>
+                {% endif %}
+                {% if subcard %}
+                    <div class="row">
+                        <div class="col-sm-11">
+                            <form action="/card/{{ subcard.get('event').get('event_id') }}/subcard/{{ subcard.get('event').get('content')[0].get('content_id') }}" method="post">
+                                <div class="form-group">
+                                    <textarea class="form-control" rows="3" required name="comment_body"></textarea>
+                                    <button type="submit" class="btn btn-primary" name="new_comment_submit"><span class="fa fa-plus"></span> Submit</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 {% endif %}
             </div>

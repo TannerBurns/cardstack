@@ -48,7 +48,7 @@ def newCard():
     if "new_card_submit" in request.form:
         cardName = request.form.get("card_name")
         resp = requests.get(API_URL.format(BASE_IP, "event?name={0}".format(cardName)))
-        # flash message about creation after checking status code?????
+        # flash message about creation after checking status code
 
     return redirect(url_for("cards", page=1))
 
@@ -78,12 +78,40 @@ def newSubCard(cardID):
     if "new_subcard_submit" in request.form:
         cardName = request.form.get("subcard_name")
         resp = requests.get(API_URL.format(BASE_IP, "event/{0}/content?title={1}".format(cardID,cardName)))
-        # flash message about creation after checking status code?????
+        # flash message about creation after checking status code?
 
     return redirect(url_for("card", cardID=cardID))
 
-@app.route("/card/<cardID>/subcard/<subcardID>")
+@app.route("/card/<cardID>/subcard/<subcardID>", methods=["GET", "POST"])
 def getSubCard(cardID, subcardID):
+
+    if request.method == "POST":
+        if "new_comment_submit" in request.form:
+            body = {"body": request.form.get("comment_body")}
+            resp = requests.post(API_URL.format(BASE_IP, "event/{0}/content/{1}/comment".format(
+                cardID,
+                subcardID
+            )), json=body)
+            # tell the user something about their comment if it fails
+        elif "delete_comment" in request.form:
+            commentID = request.form.get("delete_comment")
+            resp = requests.delete(API_URL.format(BASE_IP, "event/{0}/content/{1}/comment/{2}".format(
+                cardID,
+                subcardID,
+                commentID,
+            )))
+        elif "delete_label" in request.form:
+            commentID = request.form.get("delete_label").split(",")[0]
+            labelID = request.form.get("delete_label").split(",")[1]
+            resp = requests.delete(API_URL.format(BASE_IP, "event/{0}/content/{1}/comment/{2}/label/{3}".format(
+                cardID,
+                subcardID,
+                commentID,
+                labelID
+            )))
+            # tell the user about their label deletion success
+
+
     resp = requests.get(API_URL.format(BASE_IP, "event/{0}/content/{1}".format(cardID,subcardID)))
     if resp.status_code == 200:
         subcard = resp.json()

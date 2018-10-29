@@ -1,0 +1,4 @@
+__python__
+*.DS_Store
+*.pyc
+.idea
