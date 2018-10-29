@@ -86,7 +86,7 @@ def newSubCard(cardID):
 def getSubCard(cardID, subcardID):
 
     if request.method == "POST":
-        if "new_comment_submit" in request.form:
+        if "create_comment" in request.form:
             body = {"body": request.form.get("comment_body")}
             resp = requests.post(API_URL.format(BASE_IP, "event/{0}/content/{1}/comment".format(
                 cardID,
@@ -99,6 +99,15 @@ def getSubCard(cardID, subcardID):
                 cardID,
                 subcardID,
                 commentID,
+            )))
+        elif "create_label" in request.form:
+            commentID = request.form.get("create_label")
+            label = request.form.get("new_label_{0}".format(commentID))
+            resp = requests.get(API_URL.format(BASE_IP, "event/{0}/content/{1}/comment/{2}/label?label={3}".format(
+                cardID,
+                subcardID,
+                commentID,
+                label
             )))
         elif "delete_label" in request.form:
             commentID = request.form.get("delete_label").split(",")[0]

@@ -91,16 +91,14 @@
                                 <div class="row">
                                     <div class="col-sm-11">
                                         <center><h4><small><span class="fa fa-clock-o"></span> {{ comment.get("created") }}</small></h4></center>
-                                        {% if comment.get("labels") %}
-                                            <div class="row">
-                                                <div class=col-sm-1">
-                                                    <form action="/card/{{ subcard.get('event').get('event_id') }}/subcard/{{ subcard.get('event').get('content')[0].get('content_id') }}" method="post">
-                                                            <button class="btn btn-danger" type="submit" name="add_label" value="{{ comment.get('comment_id') }}">
-                                                                <span class="fa fa-remove"></span>
-                                                            </button>
-                                                    </form>
-                                                </div>
-                                                <div class="col-sm-6 offset-sm-1">
+                                        <div class="row">
+                                            <div class="col-sm-1">
+                                                <button class="btn btn-success" data-toggle="collapse" data-target="#add_label_{{ comment.get('comment_id') }}">
+                                                    <span class="fa fa-plus"></span>
+                                                </button>
+                                            </div>
+                                            <div class="col-sm-9 offset-sm-1">
+                                                {% if comment.get("labels") %}
                                                     <div class="row">
                                                         {% for label in comment.get("labels")|reverse %}
                                                             <div>
@@ -116,21 +114,33 @@
                                                             &nbsp&nbsp
                                                         {% endfor %}
                                                     </div>
-                                                </div>
-                                                <div class="offset-sm-4">
-                                                    <form action="/card/{{ subcard.get('event').get('event_id') }}/subcard/{{ subcard.get('event').get('content')[0].get('content_id') }}" method="post">
-                                                            <button class="btn btn-danger" type="submit" name="delete_comment" value="{{ comment.get('comment_id') }}">
-                                                                <span class="fa fa-remove"></span>
-                                                            </button>
-                                                    </form>
-                                                </div>
+                                                {% endif %}
                                             </div>
-                                        {% endif %}
+                                            <div class="col-sm-1">
+                                                <form action="/card/{{ subcard.get('event').get('event_id') }}/subcard/{{ subcard.get('event').get('content')[0].get('content_id') }}" method="post">
+                                                    <button class="btn btn-danger float-right" type="submit" name="delete_comment" value="{{ comment.get('comment_id') }}">
+                                                        <span class="fa fa-remove"></span>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
                                         <hr style="border-color:white;">
                                         <div class="row">
-                                            <div class="col-sm-1"></div>
-                                            <div class="col-sm-10">
-                                                {{comment.get("body")|safe}}
+                                            <div class="col-sm-10 offset-sm-1">
+                                                <div id="add_label_{{ comment.get('comment_id') }}" class="collapse">
+                                                    <form action="/card/{{ subcard.get('event').get('event_id') }}/subcard/{{ subcard.get('event').get('content')[0].get('content_id') }}" method="post">
+                                                        <div class="input-group" style="width:40%">
+                                                            <input type="text" class="form-control" placeholder="New Label.." name="new_label_{{ comment.get('comment_id') }}">
+                                                            <div class="input-group-append">
+                                                                <button class="btn btn-primary" type="submit" name="create_label" value="{{ comment.get('comment_id') }}"><span class="fa fa-plus"></span></button>  
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                    <br>
+                                                </div>
+                                                <div>
+                                                    {{comment.get("body")|safe}}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -147,7 +157,7 @@
                             <form action="/card/{{ subcard.get('event').get('event_id') }}/subcard/{{ subcard.get('event').get('content')[0].get('content_id') }}" method="post">
                                 <div class="form-group">
                                     <textarea class="form-control" rows="3" required name="comment_body"></textarea>
-                                    <button type="submit" class="btn btn-primary" name="new_comment_submit"><span class="fa fa-plus"></span> Submit</button>
+                                    <button type="submit" class="btn btn-primary" name="create_comment"><span class="fa fa-plus"></span> Submit</button>
                                 </div>
                             </form>
                         </div>
