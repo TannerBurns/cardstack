@@ -19,14 +19,15 @@ def index():
 
 @app.route("/cards/page/<page>")
 def cards(page):
+    LIMIT = 8
     resp = requests.get(API_URL.format(BASE_IP, "events/count"))
     if resp.status_code == 200:
-        numpages = round(resp.json().get("count") / 11)
+        numpages = round(resp.json().get("count") / 8)
         if numpages == 0:
             numpages = 1
     
-    offset = (int(page) - 1) * 11
-    resp = requests.get(API_URL.format(BASE_IP, "events?offset={0}".format(offset)))
+    offset = (int(page) - 1) * 8
+    resp = requests.get(API_URL.format(BASE_IP, "events?offset={0}&limit={1}".format(offset, LIMIT)))
     if resp.status_code == 200:
         cards = resp.json()
         cards.update({"pages":{"max": int(numpages), "current":int(page)}})
