@@ -127,7 +127,7 @@ def getSubCard(cardID, subcardID):
         subcard = resp.json()
         return render_template("subcard.html", subcard=subcard)
     
-    return render_remplate("subcard.html", subcard=None)
+    return render_template("subcard.html", subcard=None)
 
 @app.route("/card/<cardID>/subcard/<subcardID>/created")
 def setStatusCreated(cardID, subcardID):
