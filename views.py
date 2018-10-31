@@ -1,5 +1,5 @@
-from gevent import monkey
-monkey.patch_all()
+#from gevent import monkey
+#monkey.patch_all()
 
 import json
 import requests
@@ -10,7 +10,7 @@ from flask import Flask, jsonify, redirect, url_for, render_template, request
 app=Flask(__name__)
 app.secret_key = "supersecretkey"
 
-BASE_IP = "0.0.0.0"
+BASE_IP = "127.0.0.1"
 API_URL = "http://{0}:8000/api/v1/{1}"
 
 @app.route('/')
